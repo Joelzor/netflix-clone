@@ -17,7 +17,6 @@ const Row = ({ title, fetchURL, rowId }) => {
 
   const slideLeft = () => {
     let slider = document.getElementById("slider" + rowId);
-    console.log(slider);
     slider.scrollLeft = slider.scrollLeft - 500;
   };
 
