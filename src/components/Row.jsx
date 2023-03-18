@@ -17,12 +17,12 @@ const Row = ({ title, fetchURL, rowId }) => {
 
   const slideLeft = () => {
     let slider = document.getElementById("slider" + rowId);
-    slider.scrollLeft = slider.scrollLeft - 500;
+    slider.scrollLeft = slider.scrollLeft - 1000;
   };
 
   const slideRight = () => {
     let slider = document.getElementById("slider" + rowId);
-    slider.scrollLeft = slider.scrollLeft + 500;
+    slider.scrollLeft = slider.scrollLeft + 1000;
   };
 
   return (
