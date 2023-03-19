@@ -4,8 +4,17 @@ import { MdChevronLeft, MdChevronRight } from "react-icons/md";
 import { db } from "../firebase";
 import { doc, updateDoc, onSnapshot } from "firebase/firestore";
 
-const SavedShows = () => {
+const SavedMovies = () => {
+  const [movies, setMovies] = useState([]);
   const { user } = useAuthContext();
+
+  useEffect(() => {
+    onSnapshot(
+      doc(db, "users", `${user?.email}`, (doc) => {
+        setMovies(doc.data()?.savedMovies);
+      })
+    );
+  }, [user?.email]);
 
   const slideLeft = () => {
     let slider = document.getElementById("slider");
@@ -30,19 +39,24 @@ const SavedShows = () => {
           id={"slider"}
           className="w-full h-full overflow-x-scroll whitespace-nowrap scroll-smooth scrollbar-hide relative"
         >
-          {movies.map((movie, index) => {
-            <div className="w-[160px] sm:w-[200px] md:w-[240px] lg:w-[280px] inline-block cursor-pointer relative p-2">
-              <img
-                src={`https://image.tmdb.org/t/p/w500/${movie?.image}`}
-                alt={movie?.title}
-                className="w-full h-auto block"
-              />
-              <div className="absolute top-0 left-0 h-full w-full hover:bg-black/80 opacity-0 hover:opacity-100 text-white">
-                <p className="text-xs md:text-sm flex justify-center items-center h-full text-center">
-                  {movie?.title}
-                </p>
+          {movies.map((movie) => {
+            return (
+              <div
+                className="w-[160px] sm:w-[200px] md:w-[240px] lg:w-[280px] inline-block cursor-pointer relative p-2"
+                key={movie.id}
+              >
+                <img
+                  src={`https://image.tmdb.org/t/p/w500/${movie?.image}`}
+                  alt={movie?.title}
+                  className="w-full h-auto block"
+                />
+                <div className="absolute top-0 left-0 h-full w-full hover:bg-black/80 opacity-0 hover:opacity-100 text-white">
+                  <p className="text-xs md:text-sm flex justify-center items-center h-full text-center">
+                    {movie?.title}
+                  </p>
+                </div>
               </div>
-            </div>;
+            );
           })}
         </div>
         <MdChevronRight
@@ -55,4 +69,4 @@ const SavedShows = () => {
   );
 };
 
-export default SavedShows;
+export default SavedMovies;
