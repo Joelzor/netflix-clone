@@ -1,6 +1,17 @@
 import { Link } from "react-router-dom";
+import { useAuthContext } from "../context/auth";
 
 const Navbar = () => {
+  const { user, logOut } = useAuthContext();
+
+  const handleLogout = async () => {
+    try {
+      await logOut();
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
   return (
     <div className="flex items-center justify-between p-4 z-[100] absolute w-full">
       <Link to="/">
@@ -8,16 +19,30 @@ const Navbar = () => {
           NETFLIX
         </h1>
       </Link>
-      <div>
-        <Link to="/login">
-          <button className="text-white pr-4">Sign in</button>
-        </Link>
-        <Link to="signup">
-          <button className="text-white bg-red-600 px-6 py-2 rounded cursor-pointer">
-            Sign Up
+      {user?.email ? (
+        <div>
+          <Link to="/account">
+            <button className="text-white pr-4">Account</button>
+          </Link>
+          <button
+            className="text-white bg-red-600 px-6 py-2 rounded cursor-pointer"
+            onClick={handleLogout}
+          >
+            Log Out
           </button>
-        </Link>
-      </div>
+        </div>
+      ) : (
+        <div>
+          <Link to="/login">
+            <button className="text-white pr-4">Sign in</button>
+          </Link>
+          <Link to="signup">
+            <button className="text-white bg-red-600 px-6 py-2 rounded cursor-pointer">
+              Sign Up
+            </button>
+          </Link>
+        </div>
+      )}
     </div>
   );
 };
