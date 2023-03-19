@@ -9,11 +9,9 @@ const SavedMovies = () => {
   const { user } = useAuthContext();
 
   useEffect(() => {
-    onSnapshot(
-      doc(db, "users", `${user?.email}`, (doc) => {
-        setMovies(doc.data()?.savedMovies);
-      })
-    );
+    onSnapshot(doc(db, "users", `${user?.email}`), (doc) => {
+      setMovies(doc.data()?.savedMovies);
+    });
   }, [user?.email]);
 
   const slideLeft = () => {
