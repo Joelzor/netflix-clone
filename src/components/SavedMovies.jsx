@@ -1,6 +1,7 @@
 import { useState, useEffect } from "react";
 import { useAuthContext } from "../context/auth";
 import { MdChevronLeft, MdChevronRight } from "react-icons/md";
+import { AiOutlineClose } from "react-icons/ai";
 import { db } from "../firebase";
 import { doc, updateDoc, onSnapshot } from "firebase/firestore";
 
@@ -22,6 +23,19 @@ const SavedMovies = () => {
   const slideRight = () => {
     let slider = document.getElementById("slider");
     slider.scrollLeft = slider.scrollLeft + 1000;
+  };
+
+  const movieRef = doc(db, "users", `${user?.email}`);
+
+  const deleteMovie = async (id) => {
+    try {
+      const result = movies.filter((movie) => movie.id !== id);
+      await updateDoc(movieRef, {
+        savedMovies: result,
+      });
+    } catch (error) {
+      console.log(error);
+    }
   };
 
   return (
@@ -51,6 +65,12 @@ const SavedMovies = () => {
                 <div className="absolute top-0 left-0 h-full w-full hover:bg-black/80 opacity-0 hover:opacity-100 text-white">
                   <p className="text-xs md:text-sm flex justify-center items-center h-full text-center">
                     {movie?.title}
+                  </p>
+                  <p
+                    className="absolute text-gray-300 top-4 right-4"
+                    onClick={() => deleteMovie(movie.id)}
+                  >
+                    <AiOutlineClose />
                   </p>
                 </div>
               </div>
